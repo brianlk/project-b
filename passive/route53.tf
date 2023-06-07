@@ -1,5 +1,11 @@
+data "aws_route53_zone" "selected" {
+  name         = "bbnextmon.com."
+  private_zone = false
+}
+
+
 resource "aws_route53_record" "www" {
-  zone_id = "Z019754327S3CNAALMH36"
+  zone_id = data.aws_route53_zone.selected.zone_id
   name    = "www"
   type    = "CNAME"
   ttl     = 60
