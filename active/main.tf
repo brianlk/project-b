@@ -8,7 +8,7 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 locals {
-  cluster_name = "education-eks-${random_string.suffix.result}"
+  cluster_name = "${var.project}-${var.mode}-cluster"
 }
 
 resource "random_string" "suffix" {
@@ -75,7 +75,7 @@ module "vpc" {
 
 
 resource "aws_eks_cluster" "eks" {
-  name = "${var.project}-cluster"
+  name = "${var.project}-${var.mode}-cluster"
   role_arn = var.iam-role-eks-arn
 
   vpc_config {
@@ -131,8 +131,8 @@ resource "aws_eks_node_group" "worker-node-group" {
   instance_types = ["t2.micro"]
  
   scaling_config {
-    desired_size = 1
-    max_size   = 1
+    desired_size = 2
+    max_size   = 5
     min_size   = 1
   }
  
@@ -143,4 +143,3 @@ resource "aws_eks_node_group" "worker-node-group" {
    ##aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
   ]
 }
-

@@ -1,5 +1,5 @@
 /*
- * EKS iam role
+ * create EKS iam role resources
 */
 
 resource "aws_iam_role" "eks-iam-role" {
@@ -34,7 +34,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly-EK
 
 
 /*
- * EKS worknode iam role
+ * create EKS worknode iam role resources
 */
 
 resource "aws_iam_role" "workernodes" {
@@ -74,7 +74,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 
 
 /*
-* Create cluster
+* Create EKS cluster
 */
 
 module "create-active-eks" {
@@ -86,6 +86,7 @@ module "create-active-eks" {
   private-net = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   iam-role-eks-arn = aws_iam_role.eks-iam-role.arn
   iam-role-node-arn = aws_iam_role.workernodes.arn
+  mode = "active"
 }
 
 module "create-passive-eks" {
@@ -97,6 +98,7 @@ module "create-passive-eks" {
   private-net = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
   iam-role-eks-arn = aws_iam_role.eks-iam-role.arn
   iam-role-node-arn = aws_iam_role.workernodes.arn
+  mode = "passive"
 }
 
 output "a" {
@@ -106,3 +108,12 @@ output "a" {
 output "b" {
   value = aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy.policy_arn
 }
+
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "www.bbnextmon.com"
+  type    = "A"
+  ttl     = 60
+  records = ["aa1dc4d81d728482cb17830add8e50c9-40176004.us-east-1.elb.amazonaws.com"]
+}
+

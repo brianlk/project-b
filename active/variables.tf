@@ -33,3 +33,7 @@ variable "iam-role-node-arn" {
   type = string
 }
 
+variable "mode" {
+  type = string
+}
+
