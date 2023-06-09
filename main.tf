@@ -11,7 +11,7 @@ module "s3_bucket" {
   object_ownership         = "ObjectWriter"
 
   versioning = {
-    enabled = true
+    enabled = false
   }
 }
 /*
