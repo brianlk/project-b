@@ -74,12 +74,12 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 
 
 /*
-* Create EKS cluster
+* Create EKS cluster in region us-east-1 and us-west-1
 */
 
 module "create-active-eks" {
-  source = "./active"
-  project = "project-b-active"
+  source = "./build_cluster"
+  project = "project-b-"
   region = "us-east-1"
   network-ip-range = "10.0.0.0/16"
   public-net = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
@@ -90,8 +90,8 @@ module "create-active-eks" {
 }
 
 module "create-passive-eks" {
-  source = "./active"
-  project = "project-b-passive"
+  source = "./build_cluster"
+  project = "project-b-"
   region = "us-west-1"
   network-ip-range = "10.10.0.0/16"
   public-net = ["10.10.4.0/24", "10.10.5.0/24", "10.10.6.0/24"]
@@ -109,11 +109,4 @@ output "b" {
   value = aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy.policy_arn
 }
 
-resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.primary.zone_id
-  name    = "www.bbnextmon.com"
-  type    = "A"
-  ttl     = 60
-  records = ["aa1dc4d81d728482cb17830add8e50c9-40176004.us-east-1.elb.amazonaws.com"]
-}
 
