@@ -14,6 +14,7 @@ module "s3_bucket" {
     enabled = false
   }
 }
+
 /*
  * create EKS iam role resources
 */
@@ -117,12 +118,20 @@ module "create-passive-eks" {
   mode = "passive"
 }
 
-output "a" {
-  value = aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy.policy_arn
+
+output "active-eks-id" {
+  value = module.create-active-eks.cluster_id
 }
 
-output "b" {
-  value = aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy.policy_arn
+output "active-eks-status" {
+  value = module.create-active-eks.cluster_status
 }
 
+output "passvie-eks-id" {
+  value = module.create-passive-eks.cluster_id
+}
+
+output "passive-eks-status" {
+  value = module.create-passive-eks.cluster_status
+}
 

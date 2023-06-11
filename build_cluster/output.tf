@@ -1,36 +1,14 @@
-
-
 locals {
-  kubeconfig = <<KUBECONFIG
-
-
-apiVersion: v1
-clusters:
-- cluster:
-    server: ${aws_eks_cluster.eks.endpoint}
-    certificate-authority-data: ${aws_eks_cluster.eks.certificate_authority.0.data}
-  name: kubernetes
-contexts:
-- context:
-    cluster: kubernetes
-    user: aws
-  name: aws
-current-context: aws
-kind: Config
-preferences: {}
-users:
-- name: aws
-  user:
-    exec:
-      apiVersion: client.authentication.k8s.io/v1alpha1
-      command: aws-iam-authenticator
-      args:
-        - "token"
-        - "-i"
-        - "${var.project}-cluster"
-KUBECONFIG
+  k8s_output = {
+    id = aws_eks_cluster.eks.id
+    status = aws_eks_cluster.eks.status
+  }
 }
 
-output "kubeconfig" {
-  value = "${local.kubeconfig}"
+output "cluster_id" {
+  value = local.k8s_output.id
+}
+
+output "cluster_status" {
+  value = local.k8s_output.status
 }
