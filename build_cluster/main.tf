@@ -106,5 +106,5 @@ users:
       - ${aws_eks_cluster.eks.name}
       command: aws
 EOT
-  filename = "/home/brianlk/.kube/config"
+  filename = "/home/brianlk/.kube/config-${aws_eks_cluster.eks.name}"
 }
