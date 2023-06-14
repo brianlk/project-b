@@ -74,3 +74,37 @@ resource "aws_eks_node_group" "worker-node-group" {
    ##aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
   ]
 }
+
+# Update ~/.kube/config
+resource "local_file" "kubeconfig" {
+  content = <<EOT
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: ${aws_eks_cluster.eks.certificate_authority.0.data}
+    server: ${aws_eks_cluster.eks.endpoint}
+  name: ${aws_eks_cluster.eks.arn}
+contexts:
+- context:
+    cluster: ${aws_eks_cluster.eks.arn}
+    user: ${aws_eks_cluster.eks.arn}
+  name: ${aws_eks_cluster.eks.arn}
+current-context: ${aws_eks_cluster.eks.arn}
+kind: Config
+preferences: {}
+users:
+- name: ${aws_eks_cluster.eks.arn}
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      args:
+      - --region
+      - us-east-1
+      - eks
+      - get-token
+      - --cluster-name
+      - ${aws_eks_cluster.eks.name}
+      command: aws
+EOT
+  filename = "/home/brianlk/.kube/config"
+}

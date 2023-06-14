@@ -106,32 +106,36 @@ module "create-active-eks" {
   mode = "active"
 }
 
-module "create-passive-eks" {
-  source = "./build_cluster"
-  project = "project-b-"
-  region = "us-west-1"
-  network-ip-range = "10.10.0.0/16"
-  public-net = ["10.10.4.0/24", "10.10.5.0/24", "10.10.6.0/24"]
-  private-net = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
-  iam-role-eks-arn = aws_iam_role.eks-iam-role.arn
-  iam-role-node-arn = aws_iam_role.workernodes.arn
-  mode = "passive"
-}
+# module "create-passive-eks" {
+#   source = "./build_cluster"
+#   project = "project-b-"
+#   region = "us-west-1"
+#   network-ip-range = "10.10.0.0/16"
+#   public-net = ["10.10.4.0/24", "10.10.5.0/24", "10.10.6.0/24"]
+#   private-net = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
+#   iam-role-eks-arn = aws_iam_role.eks-iam-role.arn
+#   iam-role-node-arn = aws_iam_role.workernodes.arn
+#   mode = "passive"
+# }
+
+# module "k8s" {
+#   source = "./k8s"
+# }
 
 
-output "active-eks-id" {
-  value = module.create-active-eks.cluster_id
-}
+# output "active-eks-id" {
+#   value = module.create-active-eks.cluster_id
+# }
 
-output "active-eks-status" {
-  value = module.create-active-eks.cluster_status
-}
+# output "active-eks-status" {
+#   value = module.create-active-eks.cluster_status
+# }
 
-output "passvie-eks-id" {
-  value = module.create-passive-eks.cluster_id
-}
+# output "passvie-eks-id" {
+#   value = module.create-passive-eks.cluster_id
+# }
 
-output "passive-eks-status" {
-  value = module.create-passive-eks.cluster_status
-}
+# output "passive-eks-status" {
+#   value = module.create-passive-eks.cluster_status
+# }
 
