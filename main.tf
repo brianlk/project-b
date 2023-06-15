@@ -1,19 +1,19 @@
 /*
 * Create S3 bucket
 */
-module "s3_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
+# module "s3_bucket" {
+#   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket = "my-s3-bucket-1111111111111111111111"
-  acl    = "private"
+#   bucket = "my-s3-bucket-1111111111111111111111"
+#   acl    = "private"
 
-  control_object_ownership = true
-  object_ownership         = "ObjectWriter"
+#   control_object_ownership = true
+#   object_ownership         = "ObjectWriter"
 
-  versioning = {
-    enabled = false
-  }
-}
+#   versioning = {
+#     enabled = false
+#   }
+# }
 
 /*
  * create EKS iam role resources
@@ -105,6 +105,14 @@ module "create-active-eks" {
   iam-role-node-arn = aws_iam_role.workernodes.arn
   mode = "active"
 }
+
+module "k8s" {
+  source = "./k8s"
+  cluster_name = module.create-active-eks.cluster_id
+  cert = module.create-active-eks.cert
+  endpoint = module.create-active-eks.endpoint
+}
+
 
 # module "create-passive-eks" {
 #   source = "./build_cluster"

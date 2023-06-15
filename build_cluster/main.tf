@@ -96,7 +96,7 @@ users:
 - name: ${aws_eks_cluster.eks.arn}
   user:
     exec:
-      apiVersion: client.authentication.k8s.io/v1alpha1
+      apiVersion: client.authentication.k8s.io/v1beta1
       args:
       - --region
       - us-east-1
