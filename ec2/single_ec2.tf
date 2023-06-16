@@ -37,6 +37,20 @@ resource "aws_instance" "test" {
   }
 }
 
+resource "aws_ebs_volume" "test" {
+  availability_zone = "us-east-1a"
+  size              = 8
+  tags = {
+    Name = "Test_ebs"
+  }
+}
+
+resource "aws_volume_attachment" "test" {
+  device_name = "/dev/sdz"
+  volume_id   = aws_ebs_volume.test.id
+  instance_id = aws_instance.test.id
+}
+
 output "instance_id" {
   value = "${aws_instance.test.id} ${aws_instance.test.public_ip}"
 }
